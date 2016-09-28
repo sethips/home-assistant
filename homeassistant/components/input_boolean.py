@@ -14,6 +14,7 @@ from homeassistant.const import (
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity import ToggleEntity
 from homeassistant.helpers.entity_component import EntityComponent
+from homeassistant.helpers import config_per_platform
 
 DOMAIN = 'input_boolean'
 
@@ -61,15 +62,16 @@ def setup(hass, config):
 
     entities = []
 
-    for object_id, cfg in config[DOMAIN].items():
-        if not cfg:
-            cfg = {}
+    for _, p_config in config_per_platform(config, DOMAIN):
+        for object_id, cfg in p_config.items():
+            if not cfg:
+                cfg = {}
 
-        name = cfg.get(CONF_NAME)
-        state = cfg.get(CONF_INITIAL, False)
-        icon = cfg.get(CONF_ICON)
+            name = cfg.get(CONF_NAME)
+            state = cfg.get(CONF_INITIAL, False)
+            icon = cfg.get(CONF_ICON)
 
-        entities.append(InputBoolean(object_id, name, state, icon))
+            entities.append(InputBoolean(object_id, name, state, icon))
 
     if not entities:
         return False
