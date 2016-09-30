@@ -19,6 +19,23 @@ from homeassistant.const import (
 from homeassistant.util.async import run_callback_threadsafe
 
 
+import asyncio.tasks
+
+
+def monkey_patch_asyncio():
+    class EatCalls:
+        def add(self, other):
+            return
+
+    asyncio.tasks.Task._all_tasks = EatCalls()
+    try:
+        del asyncio.tasks.Task.__del__
+    except:
+        pass
+
+monkey_patch_asyncio()
+
+
 def validate_python() -> None:
     """Validate we're running the right Python version."""
     if sys.version_info[:3] < REQUIRED_PYTHON_VER:
