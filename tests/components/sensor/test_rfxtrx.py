@@ -10,7 +10,6 @@ from homeassistant.const import TEMP_CELSIUS
 from tests.common import get_test_home_assistant
 
 
-@pytest.mark.skipif("os.environ.get('RFXTRX') != 'RUN'")
 class TestSensorRfxtrx(unittest.TestCase):
     """Test the Rfxtrx sensor platform."""
 
